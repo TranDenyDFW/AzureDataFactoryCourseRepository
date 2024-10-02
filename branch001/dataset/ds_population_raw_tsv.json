@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "poopulation_by_age.tsv",
+				"fileName": "population_by_age.tsv",
 				"fileSystem": "raw"
 			},
 			"columnDelimiter": ",",
