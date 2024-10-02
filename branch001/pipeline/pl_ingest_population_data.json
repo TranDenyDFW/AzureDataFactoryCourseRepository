@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Check File Exists",
+				"name": "CheckFileExists",
 				"type": "Validation",
 				"dependsOn": [],
 				"userProperties": [],
@@ -18,11 +18,11 @@
 				}
 			},
 			{
-				"name": "Get File Metadata",
+				"name": "GetMetadata",
 				"type": "GetMetadata",
 				"dependsOn": [
 					{
-						"activity": "Check File Exists",
+						"activity": "CheckFileExists",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -56,11 +56,11 @@
 				}
 			},
 			{
-				"name": "If Condition1",
+				"name": "IfTrue_CopyPopulationData",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
-						"activity": "Get File Metadata",
+						"activity": "GetMetadata",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -74,7 +74,7 @@
 					},
 					"ifTrueActivities": [
 						{
-							"name": "Copy Population Data_copy1",
+							"name": "CopyPopulationData",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -130,6 +130,45 @@
 									"type": "DatasetReference"
 								}
 							]
+						},
+						{
+							"name": "DeleteSourceFIle",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "CopyPopulationData",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "ds_population_raw_gz",
+									"type": "DatasetReference"
+								},
+								"logStorageSettings": {
+									"linkedServiceName": {
+										"referenceName": "ls_ablob_covidreportingsa",
+										"type": "LinkedServiceReference"
+									},
+									"path": "population"
+								},
+								"enableLogging": true,
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							}
 						}
 					]
 				}
